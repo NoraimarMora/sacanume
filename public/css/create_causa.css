@@ -24,7 +24,17 @@ form #fecha {
 form #nombre,
 form #num_exp {
 	border-radius: 25px;
-	width: 100%;
+	width: 95%;
+}
+
+form #causales {
+	padding: .45rem .6rem;
+    font-size: 1rem;
+	line-height: 1.25;
+	border-radius: 25px;
+	width: 88%;
+	border-color: rgb(221, 219, 219);
+	color: #2A2A2A;
 }
 
 form label {
@@ -47,4 +57,20 @@ form > div > #nombre::placeholder {
 .lista-etapas {
 	list-style: none;
 	padding: 0;
+}
+
+form > div > a {
+	font-size: 1.75rem;
+	color:#FF5349;
+	vertical-align: middle;
+}
+
+form > div > a:hover {
+	color:#2A2A2A;
+}
+
+.btn {
+	background: #FF5349;
+	color: #FFFFFF;
+	float: right;
 }

@@ -51,7 +51,7 @@
 
 @section('contenido_sublayout')
     <div class="container">
-        <form action="{{ action('CausaController@store') }}" method="POST">
+        <form id="nueva_causa" action="{{ action('CausaController@store') }}" method="POST">
             <h3><strong>Nueva Causa</strong></h3>
             <br>
             <div class="form-group col-md-6">
@@ -59,12 +59,16 @@
                 <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre">
             </div>
             <div class="form-group col-md-6">
-                <label><strong>Numero de Expediente:</strong></label>
+                <label for="num_exp"><strong>Numero de Expediente:</strong></label>
                 <input type="number" class="form-control" name="num_exp" id="num_exp" min="1">
             </div>
-            <div class="form-group col-md-12">
-                <label><strong>Causales:</strong></label>
-                <!--Revisar en proyecto de galeria la parte de agregar mas campos-->
+            <div class="form-group col-md-12" id="select">
+                <label for="causales"><strong>Causales:</strong></label>
+                <br>
+                <select name="causales[]" id="causales">
+                    <option>Causal 1</option>
+                </select>
+                <a href="#"><i class="fa fa-plus-circle"></i></a>
             </div>
             <div class="form-group col-md-12">
                 <label><strong>Etapas:</strong></label>
@@ -83,6 +87,12 @@
             </div>
             <div class="form-group col-md-12">
                 <label><strong>Operadores:</strong></label>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-icon btn-sm pull-right">
+                    <i class="fa fa-save"></i> Guardar</button>
+                </div>
             </div>
         </form>
     </div>

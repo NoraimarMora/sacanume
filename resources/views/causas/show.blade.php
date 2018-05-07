@@ -85,7 +85,7 @@
                 @foreach($causa_actual->causales as $causal)
                     <li>
                         <p>{{ $causal->cannon }}
-                            @if($causal->numero != NULL)
+                            @if($causal->numero)
                                 , {{ $causal->numero }}
                             @endif    
                             > {{ $causal->nombre }}</p>
