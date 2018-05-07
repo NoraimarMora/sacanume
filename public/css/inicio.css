@@ -1,0 +1,76 @@
+.search {
+	display: none;
+}
+
+.last-cases {
+	padding: 0;
+	height: 100%;
+	border-right: 1px solid rgb(221, 219, 219);
+}
+
+.last-cases .lista {
+	display: block;
+	list-style: none;
+	padding-left: 0;
+}
+
+.last-cases .lista p {
+	margin: 0;
+	line-height: 30px;
+	position: relative;
+	display: block;
+	height: auto;
+	white-space: normal;
+}
+
+.last-cases .lista li > a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	color: #2A2A2A;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 14px;
+	line-height: 1.625rem; 
+	text-align: center;
+	border-bottom: 1px solid rgb(221, 219, 219);
+} 
+
+.last-cases .lista li:hover,
+.last-cases .lista li.active {
+	border-left: 6px solid #FF5349;
+	margin-left: 5px; 
+}
+
+.content-section {
+	background: #F0F0F1;
+	height: 100%;
+	padding-top: 25px; 
+	padding-left: 20px;
+	color: #2A2A2A;
+}
+
+.content-section h4 {
+	text-transform: uppercase;
+	line-height: 30px;
+	padding-bottom: 15px;
+}
+
+.content-section .est-content {
+	width: 380px;
+}
+
+.content-section .estadisticas li > p {
+	font-size: 18px;
+}
+
+.content-section .chart {
+	position: absolute;
+	top: 30px;
+	left: 40%;
+	width: 480px;
+	height: 225px;
+	padding: 0;
+}

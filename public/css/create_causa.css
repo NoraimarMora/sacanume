@@ -1,0 +1,43 @@
+.search {
+    display: none;
+}
+
+form {
+	width: 70%;
+	padding: 20px;
+	margin: auto;
+	box-shadow: 0 1px 15px 1px rgba(39, 39, 39, 0.15);
+    border-radius: 10px;
+    background: #FFFFFF;
+}
+
+form #fecha {
+	border-radius: 25px;
+	width: 30%;
+	display: inline-block;
+	border-color: 1px solid rgb(221, 219, 219);
+	color: #2A2A2A;
+}
+
+form #nombre,
+form #num_exp {
+	border-radius: 25px;
+	width: 100%;
+}
+
+.form-group label {
+	color: #FF5349;
+}
+
+div .form-group.col-md-6 {
+	float: left;
+}
+
+form > div > #nombre::placeholder {
+	color: rgb(221, 219, 219);
+}
+
+.lista-etapas {
+	list-style: none;
+	padding: 0;
+}
