@@ -6,6 +6,8 @@ form {
 	width: 70%;
 	padding: 20px;
 	margin: auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
 	box-shadow: 0 1px 15px 1px rgba(39, 39, 39, 0.15);
     border-radius: 10px;
     background: #FFFFFF;
@@ -25,8 +27,13 @@ form #num_exp {
 	width: 100%;
 }
 
-.form-group label {
+form label {
 	color: #FF5349;
+}
+
+form h3 {
+	color: #FF5349;
+	text-align: center;
 }
 
 div .form-group.col-md-6 {

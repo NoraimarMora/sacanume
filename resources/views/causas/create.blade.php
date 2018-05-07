@@ -52,6 +52,8 @@
 @section('contenido_sublayout')
     <div class="container">
         <form action="{{ action('CausaController@store') }}" method="POST">
+            <h3><strong>Nueva Causa</strong></h3>
+            <br>
             <div class="form-group col-md-6">
                 <label for="nombre"><strong>Nombre:</strong></label>
                 <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre">
@@ -61,11 +63,15 @@
                 <input type="number" class="form-control" name="num_exp" id="num_exp" min="1">
             </div>
             <div class="form-group col-md-12">
+                <label><strong>Causales:</strong></label>
+                <!--Revisar en proyecto de galeria la parte de agregar mas campos-->
+            </div>
+            <div class="form-group col-md-12">
                 <label><strong>Etapas:</strong></label>
                 <ul class="lista-etapas">
                     @foreach($etapas as $etapa)
                         <li>
-                            <input type="checkbox" name="{{ $etapa->id }}" value="{{ $etapa->id }}">
+                            <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
                             {{ $etapa->descripcion }}.
                             @if($etapa->id == 6)
                                 &nbsp;Fecha:
@@ -74,6 +80,9 @@
                         </li>
                     @endforeach
                 </ul>
+            </div>
+            <div class="form-group col-md-12">
+                <label><strong>Operadores:</strong></label>
             </div>
         </form>
     </div>

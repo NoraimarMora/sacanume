@@ -98,7 +98,8 @@ class CausaController extends Controller
          * $causa = Causa::find($id);
          * $causa->nombre = $request->nombre;
          * $causa->num_exp = $request->num_exp;
-         * $causa->etapa_id = $request->
+         * $causa->etapa_id = end($request->etapa[]);
+         * $causa->etapas_completadas
          * $causa->save();
          */
     }
