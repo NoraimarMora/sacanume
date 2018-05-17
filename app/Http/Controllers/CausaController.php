@@ -42,10 +42,27 @@ class CausaController extends Controller
          *  bcrypt($request->password())
          */
 
-        /*
-         * $causa = new Causa($request->all());
-         * $causa->save();
-         */
+        $request->validate([
+            'nombre' => 'required',
+            'num_exp' => 'required|numeric'
+        ]);
+
+        $etapas = $request->etapa;
+
+        $causa = new Causa();
+        $causa->nombre = $request->nombre;
+        $causa->num_exp = $request->num_exp;
+        if(!empty($request->etapa)) {
+            $causa->etapa_id = end($etapas);
+            $causa->etapas_completadas = serialize($etapas);
+        } else {
+            $causa->etapa_id = NULL;
+            $causa->etapas_completadas = NULL;
+        }
+        $causa->save();
+
+        return $this->index();
+        
     }
 
     /**
@@ -68,7 +85,9 @@ class CausaController extends Controller
      */
     public function edit(Causa $causa)
     {
-        dd('Editar');
+        $etapas = Etapa::all();
+        $etapas_completadas = collect(unserialize($causa->etapas_completadas));
+        return view('causas/update', ['causa' => $causa, 'etapas' => $etapas, 'etapas_completadas' => $etapas_completadas]);
     }
 
     /**
@@ -77,31 +96,27 @@ class CausaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, Causa $causa)
     {
-        /* 
-         * Hacer que al momento de mostrar la plantilla para 
-         * actualizar se carguen todas las etapas ya marcadas
-         * anteriormente
-         * 
-         * Para obtener los elementos seleccionados en el checkbox 
-         * colocar de nombre en el input etapa[]. Verificar si esta 
-         * vacio, si no es el caso -> json_encode y luego serialize 
-         * y actualizar campo de la tabla etapas_completadas
-         * 
-         * Para obtener el ultimo valor del arreglo usar end($arreglo).
-         * Este sera el valor que se almacene en 'etapa_id'
-         * 
-         */
+        $request->validate([
+            'nombre' => 'required',
+            'num_exp' => 'required|numeric'
+        ]);
 
-        /*
-         * $causa = Causa::find($id);
-         * $causa->nombre = $request->nombre;
-         * $causa->num_exp = $request->num_exp;
-         * $causa->etapa_id = end($request->etapa[]);
-         * $causa->etapas_completadas
-         * $causa->save();
-         */
+        $etapas = $request->etapa;
+
+        $causa->nombre = $request->nombre;
+        $causa->num_exp = $request->num_exp;
+        if(!empty($request->etapa)) {
+            $causa->etapa_id = end($etapas);
+            $causa->etapas_completadas = serialize($etapas);
+        } else {
+            $causa->etapa_id = NULL;
+            $causa->etapas_completadas = NULL;
+        }
+        $causa->save();
+
+        return $this->index();
     }
 
     /**
@@ -112,10 +127,7 @@ class CausaController extends Controller
      */
     public function destroy(Causa $causa)
     {
-        dd('Eliminar');
-
-        /*  $causa->delete();
-            return view()
-        */
+        $causa->delete();
+        return $this->index();
 	}
 }

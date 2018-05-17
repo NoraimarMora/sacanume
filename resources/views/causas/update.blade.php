@@ -51,18 +51,18 @@
 
 @section('contenido_sublayout')
     <div class="container">
-        <form id="nueva_causa" action="{{ action('CausaController@store') }}" method="POST">
-            <h3><strong>Nueva Causa</strong></h3>
+        <form id="editar_causa" action="{{ action('CausaController@update', ['causa' => $causa]) }}" method="PUT">
+            <h3><strong>Editar Causa {{ $causa->nombre }}</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="nombre"><strong>Nombre:</strong></label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre">
+                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{ $causa->nombre }}">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="num_exp"><strong>Numero de Expediente:</strong></label>
-                    <input type="text" class="form-control" name="num_exp" id="num_exp">
+                    <input type="text" class="form-control" name="num_exp" id="num_exp" value="{{ $causa->num_exp }}">
                 </div>
             </div>
             <div class="form-group col-md-12" id="select">
@@ -78,12 +78,17 @@
                 <ul class="lista-etapas">
                     @foreach($etapas as $etapa)
                         <li>
-                            <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
-                            {{ $etapa->descripcion }}.
-                            @if($etapa->id == 6)
+                            @if($etapas_completadas->contains($etapa->id))
+                                <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}" checked>
+                                {{ $etapa->descripcion }}.
+                            @else
+                                <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
+                                {{ $etapa->descripcion }}.
+                            @endif
+                            <!--@if($etapa->id == 6)
                                 &nbsp;Fecha:
                                 <input type="date" class="form-control" name="fecha" id="fecha">
-                            @endif
+                            @endif-->
                         </li>
                     @endforeach
                 </ul>

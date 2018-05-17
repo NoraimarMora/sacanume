@@ -25,21 +25,22 @@ class InicioController extends Controller
         $ultimas_causas = $causas->sortByDesc('id')->take(5);
         
         foreach($causas as $causa) {
-            switch($causa->etapa->fase->id) {
-                case 1:
-                    $c_fase_previa++;
-                    break;
-                case 2:
-                    $c_proceso++;
-                    break;
-                case 3:
-                    $c_fase_pruebas++;
-                    break;
-                case 4:
-                    $c_finalizada++;
-                    break; 
+            if($causa->etapa) {
+                switch($causa->etapa->fase->id) {
+                    case 1:
+                        $c_fase_previa++;
+                        break;
+                    case 2:
+                        $c_proceso++;
+                        break;
+                    case 3:
+                        $c_fase_pruebas++;
+                        break;
+                    case 4:
+                        $c_finalizada++;
+                        break; 
+                }
             }
-
         }
 
         $estadisticas = array();

@@ -44,7 +44,7 @@
     </li>
     <li>
         <a href="#">
-            <i class="fa fa-sign-out"></i>
+            <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
     </li>
@@ -76,9 +76,12 @@
             <h4>{{ $causa_actual->nombre }}</h4>
             <p>Numero de expediente: {{ $causa_actual->num_exp }}</p>
             <p>
-                Estado: {{ $causa_actual->etapa->fase->descripcion }} 
-                <i class="fa fa-arrow-right"></i> 
-                {{ $causa_actual->etapa->descripcion }}
+                Estado: 
+                @if($causa_actual->etapa)
+                    {{ $causa_actual->etapa->fase->descripcion }} 
+                    <i class="fa fa-arrow-right"></i> 
+                    {{ $causa_actual->etapa->descripcion }}
+                @endif
             </p>
             <p>Causales:</p>
             <ul>

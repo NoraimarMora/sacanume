@@ -69,20 +69,23 @@
                     <tr>
                         <td class="text-center">{{ $causa->num_exp }}</td>
                         <td>{{ $causa->nombre }}</td>
-                        <td>{{ $causa->etapa->fase->descripcion }} 
-                            <i class="fa fa-arrow-right"></i> 
-                            {{ $causa->etapa->descripcion }}
+                        <td>
+                            @if($causa->etapa)
+                                {{ $causa->etapa->fase->descripcion }} 
+                                <i class="fa fa-arrow-right"></i> 
+                                {{ $causa->etapa->descripcion }}
+                            @endif
                         </td>
                         <td class="text-center">
-                            <form id="editar" action="{{ action('CausaController@edit', ['causa' => $causa]) }}">
+                            <form id="editar{{ $causa->id }}" action="{{ action('CausaController@edit', ['causa' => $causa]) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
-                            <form id="eliminar" action="{{ action('CausaController@destroy', ['causa' => $causa]) }}" method="post">
+                            <form id="eliminar{{ $causa->id }}" action="{{ action('CausaController@destroy', ['causa' => $causa]) }}" method="post">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
-                            <button class="btn btn-success btn-icon btn-sm " type="submit" form="editar"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-icon btn-sm " type="submit" form="eliminar"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-success btn-icon btn-sm " type="submit" form="editar{{ $causa->id }}"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-icon btn-sm " type="submit" form="eliminar{{ $causa->id }}"><i class="fa fa-trash"></i></button>
                         </td>                        
                     </tr>
                 @endforeach
