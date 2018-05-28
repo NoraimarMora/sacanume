@@ -1,7 +1,7 @@
 @extends('global')
 
 @section('estilos_sublayout')
-    <link rel="stylesheet" href="{{ asset('css/create_causa.css') }}">
+    <!--link rel="stylesheet" href="{{ asset('css/create_causa.css') }}"-->
 @endsection
 
 @section('estado_menu')
@@ -11,13 +11,13 @@
             <p>Inicio</p>
         </a>
     </li>
-    <li class="active">
+    <li>
         <a href="{{ action('CausaController@index') }}">
             <i class="fa fa-balance-scale"></i>
             <p>Causas</p>
         </a>
     </li>
-    <li>
+    <li class="active">
         <a href="{{ action('CausalController@index') }}">
             <i class="fa fa-book"></i>
             <p>Causales</p>
@@ -50,7 +50,7 @@
 @endsection
 
 @section('contenido_sublayout')
-    <div class="container">
+    <!--div class="container">
         <form id="nueva_causa" action="{{ action('CausaController@store') }}" method="POST">
             <h3><strong>Nueva Causa</strong></h3>
             <br>
@@ -80,10 +80,10 @@
                         <li>
                             <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
                             {{ $etapa->descripcion }}.
-                            <!--@if($etapa->id == 6)
+                            @if($etapa->id == 6)
                                 &nbsp;Fecha:
                                 <input type="date" class="form-control" name="fecha" id="fecha">
-                            @endif-->
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -104,5 +104,5 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div-->
 @endsection

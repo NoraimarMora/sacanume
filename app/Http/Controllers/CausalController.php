@@ -14,7 +14,8 @@ class CausalController extends Controller
      */
     public function index()
     {
-        return view('causales');
+        $causales = Causal::orderBy('cannon', 'numero')->paginate(10);
+        return view('causales', ['causales' => $causales]);
     }
 
     /**
@@ -24,6 +25,7 @@ class CausalController extends Controller
      */
     public function create()
     {
+        return view('causales/create');
     }
 
     /**
@@ -34,46 +36,62 @@ class CausalController extends Controller
      */
     public function store(Request $request)
     {
+        $causal = new Causal();
+        $causal->cannon = $request->cannon;
+        $causal->numero = $request->numero;
+        $causal->descripcion = $request->descripcion; 
+        $causal->save();
+        
+        return $this->index();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Causal $causal)
     {
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Causal $causal)
     {
+        return view('causales/update', ['causal' => $causal]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, Causal $causa)
     {
+        $causal->cannon = $request->cannon;
+        $causal->numero = $request->numero;
+        $causal->descripcion = $request->descripcion; 
+        $causal->save();
+        
+        return $this->index();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Causal $causal)
     {
+        $causal->delete();
+        return $this->index();
 	}
 }

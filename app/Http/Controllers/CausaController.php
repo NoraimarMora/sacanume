@@ -38,10 +38,6 @@ class CausaController extends Controller
      */
     public function store(Request $request)
     {
-        /* Para encriptar:
-         *  bcrypt($request->password())
-         */
-
         $request->validate([
             'nombre' => 'required',
             'num_exp' => 'required|numeric'
