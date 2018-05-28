@@ -51,10 +51,11 @@
 
 @section('contenido_sublayout')
     <div class="container">
-        <form id="editar_causa" action="{{ action('CausaController@update', ['causa' => $causa]) }}" method="PUT">
+        <form id="editar_causa" action="{{ action('CausaController@update', ['causa' => $causa]) }}" method="POST">
             <h3><strong>Editar Causa {{ $causa->nombre }}</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="_method" value="PUT">
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="nombre"><strong>Nombre:</strong></label>
