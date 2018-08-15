@@ -78,7 +78,7 @@ causa...
                     <th class="text-center"># Exp.</th>
                     <th>Nombre</th>
                     <th>Estado</th>
-                    <th class="text-center accion" id="accion">Accion</th>                              
+                    <th class="text-center" id="accion">Accion</th>                              
                 </tr>
             </thead>
             <tbody>
@@ -99,7 +99,7 @@ causa...
                                 {{ $causa->etapa->descripcion }}
                             @endif
                         </td>
-                        <td class="text-center accion">
+                        <td class="text-center">
                             <form id="editar{{ $causa->id }}" action="{{ action('CausaController@edit', ['id' => $causa->id]) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
@@ -107,9 +107,9 @@ causa...
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
-                            <button class="btn btn-info btn-icon btn-sm " type="button" data-toggle="modal" data-target="#modal_causa{{ $causa->id }}"><i class="fa fa-eye"></i></button>
-                            <button class="btn btn-success btn-icon btn-sm " type="submit" form="editar{{ $causa->id }}"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-icon btn-sm " type="submit" form="eliminar{{ $causa->id }}" onclick="return confirm('Esta seguro que desea eliminar el registro?');"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-info btn-icon btn-sm" type="button" data-toggle="modal" data-target="#modal_causa{{ $causa->id }}"><i class="fa fa-eye"></i></button>
+                            <button class="btn btn-success btn-icon btn-sm accion" type="submit" form="editar{{ $causa->id }}"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-icon btn-sm accion" type="submit" form="eliminar{{ $causa->id }}" onclick="return confirm('Esta seguro que desea eliminar el registro?');"><i class="fa fa-trash"></i></button>
                         </td>                        
                     </tr>
                     <div id="modal_causa{{ $causa->id }}" class="modal fade" role="dialog">
