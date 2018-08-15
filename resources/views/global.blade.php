@@ -22,12 +22,27 @@
 	
 </head>
 <body>
+	@if(Auth::user()->tipo == 2 || Auth::user()->tipo == 3)
+		<style type="text/css">
+			.sidebar .nav li#menu_usuario {
+				display: none;
+			}
+		</style>
+	@endif
+
+	@if(Auth::user()->tipo == 3)
+		<style type="text/css">
+			#add_button,
+			.accion {
+				display: none;
+			}
+		</style>
+	@endif
 	<div class="wrapper">
 		<div class="sidebar">
 			<div class="nombre">
                 <div class="simple-text">
-					<!-- Aqui va una variable que retorne el nombre del usuario actual-->
-                    Valentina Gobbo 
+					{{ Auth::user()->nombre }} {{ Auth::user()->apellido }}
                 </div>
 			</div>
 			<div class="sidebar-wrapper">
@@ -43,15 +58,18 @@
                 </div>
 			</header>
 			<div class="search">
-				<a href="@yield('controller')">
+				<a href="@yield('controller')" id="add_button">
 					<img src="{{ asset('img/ad.png') }}">
 				</a>
-                <a href="#">
+                <!--a href="#">
 					<img src="{{ asset('img/File.png') }}">
-				</a>
-                <div class="input-group">
-                    <i id="search-icon" class="fa fa-search"></i>
-                    <input type="text" name="busqueda"></div>
+				</a-->
+				<form id="buscador" action="@yield('buscador')">
+	                <div class="input-group">
+	                    <i id="search-icon" class="fa fa-search"></i>
+	                    <input type="text" name="busqueda" placeholder="Buscar @yield('buscar')">
+	                </div>
+                </form>
             </div>
 			<div class="content container-fluid row">
 				@yield('contenido_sublayout')

@@ -1,7 +1,7 @@
 @extends('global')
 
 @section('estilos_sublayout')
-    <link rel="stylesheet" href="{{ asset('css/create_causal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/create.css') }}">
 @endsection
 
 @section('estado_menu')
@@ -29,46 +29,59 @@
             <p>Operadores</p>
         </a>
     </li>
-    <li>
+    <li id="menu_usuario">
         <a href="{{ action('UsuarioController@index') }}">
             <i class="fa fa-user"></i>
             <p>Usuarios</p>
         </a>
     </li>
     <li>
-        <a href="{{ action('ConfiguracionController@index') }}">
+        <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
             <p>Configuracion</p>
         </a>
     </li>
     <li>
-        <a href="#">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
 @section('contenido_sublayout')
     <div class="container">
-        <form id="nuevo_causal" action="{{ action('CausalController@update', ['causal' => $causal]) }}" method="POST">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
+        <form id="editar_causal" action="{{ action('CausalController@update', ['id' => $causal->id]) }}" method="POST">
             <h3><strong>Editar Causal</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="_method" value="PUT">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="cannon"><strong>Cannon:</strong></label>
+                    <label for="cannon">* <strong>Cannon:</strong></label>
                     <input type="text" class="form-control" name="cannon" id="cannon" value="{{ $causal->cannon }}">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="numero"><strong>Numero:</strong></label>
-                    <input type="number" class="form-control" name="numero" id="numero" min="1">
+                    <input type="number" class="form-control" name="numero" id="numero" min="1" value="{{ $causal->numero }}">
                 </div>
             </div>
             <div class="form-group col-md-12" id="select">
-                <label for="causales"><strong>Descripcion:</strong></label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion">
+                <label for="causales">* <strong>Descripcion:</strong></label>
+                <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ $causal->descripcion }}">
             </div>
             <br>
             <div class="row">

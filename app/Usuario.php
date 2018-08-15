@@ -17,7 +17,7 @@ class Usuario extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'nombre', 'tipo'
+        'username', 'password', 'nombre', 'apellido', 'tipo'
     ];
 
     /**
@@ -28,4 +28,13 @@ class Usuario extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function scopeSearch($query, $busqueda) 
+    {
+        return $query->where(function ($q) use ($busqueda) {
+            $q->where('username', 'LIKE', "%$busqueda%")
+              ->orWhere('nombre', 'LIKE', "%$busqueda%")
+              ->orWhere('apellido', 'LIKE', "%$busqueda%");
+        });
+    }
 }

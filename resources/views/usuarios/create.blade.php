@@ -1,7 +1,7 @@
 @extends('global')
 
 @section('estilos_sublayout')
-    <!--link rel="stylesheet" href="{{ asset('css/create_causa.css') }}"-->
+    <link rel="stylesheet" href="{{ asset('css/create.css') }}">
 @endsection
 
 @section('estado_menu')
@@ -17,7 +17,7 @@
             <p>Causas</p>
         </a>
     </li>
-    <li class="active">
+    <li>
         <a href="{{ action('CausalController@index') }}">
             <i class="fa fa-book"></i>
             <p>Causales</p>
@@ -29,73 +29,63 @@
             <p>Operadores</p>
         </a>
     </li>
-    <li>
+    <li class="active" id="menu_usuario">
         <a href="{{ action('UsuarioController@index') }}">
             <i class="fa fa-user"></i>
             <p>Usuarios</p>
         </a>
     </li>
     <li>
-        <a href="{{ action('ConfiguracionController@index') }}">
+        <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
             <p>Configuracion</p>
         </a>
     </li>
     <li>
-        <a href="#">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
 @section('contenido_sublayout')
-    <!--div class="container">
-        <form id="nueva_causa" action="{{ action('CausaController@store') }}" method="POST">
-            <h3><strong>Nueva Causa</strong></h3>
+    <div class="container">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
+        <form id="nuevo_usuario" action="{{ action('UsuarioController@store') }}" method="POST">
+            <h3><strong>Nuevo Usuario</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="nombre"><strong>Nombre:</strong></label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre">
+                    <label for="nombre">* <strong>Nombre:</strong></label>
+                    <input type="text" class="form-control" name="nombre" id="nombre">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="num_exp"><strong>Numero de Expediente:</strong></label>
-                    <input type="text" class="form-control" name="num_exp" id="num_exp">
+                    <label for="apellido">* <strong>Apellido:</strong></label>
+                    <input type="text" class="form-control" name="apellido" id="apellido">
                 </div>
             </div>
             <div class="form-group col-md-12" id="select">
-                <label for="causales"><strong>Causales:</strong></label>
+                <label for="tipo">* <strong>Tipo:</strong></label>
                 <br>
-                <select name="causales[]" id="causales">
-                    <option>Causal 1</option>
+                <select name="tipo" id="tipo">
+                    <option value="1">Super Administrador</option>
+                    <option value="2">Administrador</option>
+                    <option value="3" selected>Espectador</option>
                 </select>
-                <a href="#"><i class="fa fa-plus-circle"></i></a>
-            </div>
-            <div class="form-group col-md-12">
-                <label><strong>Etapas:</strong></label>
-                <ul class="lista-etapas">
-                    @foreach($etapas as $etapa)
-                        <li>
-                            <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
-                            {{ $etapa->descripcion }}.
-                            @if($etapa->id == 6)
-                                &nbsp;Fecha:
-                                <input type="date" class="form-control" name="fecha" id="fecha">
-                            @endif
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="form-group col-md-12">
-                <label><strong>Operadores:</strong></label>
-                <br><ul>
-                <li><label>Juez: </label></li>
-                <li><label>Conjuez: </label></li>
-                <li><label>Conjuez: </label></li>
-                <li><label>Defensor del vinculo: </label></li>
-                <li><label>Abogado: </label></li></ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -104,5 +94,5 @@
                 </div>
             </div>
         </form>
-    </div-->
+    </div>
 @endsection

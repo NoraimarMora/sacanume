@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -28,7 +30,7 @@ class LoginController extends Controller
     protected function redirectTo() 
     {
         if(Auth::check()) {
-            return 'inicio/'.Auth::id();
+            return redirect()->route('inicio');
         }
     }
 
@@ -44,11 +46,35 @@ class LoginController extends Controller
 
     public function index()
     {
-        return view('login');
+        if(Auth::check()) {
+            return redirect()->route('inicio');
+        }
+
+        return view('auth/login');
     }
 
     public function processLogin()
     {
-        
+    }
+
+    public function login(Request $request) 
+    {
+        $data = array(
+            'username' => $request->username,
+            'password' => $request->password
+        );
+
+        if(Auth::attempt($data)) {
+            return redirect()->route('inicio');
+        }
+
+        return redirect()->action('Auth\LoginController@index')->with('error', 'Usuario y/o Contraseña invalido');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->action('Auth\LoginController@index');
     }
 }

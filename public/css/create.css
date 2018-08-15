@@ -2,6 +2,10 @@
     display: none;
 }
 
+.content {
+	height: auto;
+}
+
 form {
 	width: 70%;
 	padding: 20px;
@@ -22,19 +26,46 @@ form #fecha {
 }
 
 form #nombre,
-form #num_exp {
+form #num_exp,
+form #cannon,
+form #numero,
+form #apellido, 
+form #username, 
+form #password {
 	border-radius: 25px;
 	width: 95%;
 }
 
-form #causales {
+form #descripcion {
+    border-radius: 25px;
+    width: 97.5%;
+}
+
+form .causales,
+form #tipo,
+form .operador,
+form #titulo {
 	padding: .45rem .6rem;
     font-size: 1rem;
 	line-height: 1.25;
 	border-radius: 25px;
-	width: 88%;
+	width: 90%;
 	border-color: rgb(221, 219, 219);
 	color: #2A2A2A;
+	vertical-align: middle;
+}
+
+.operadores li {
+	padding-bottom: 10px;
+}
+
+form #tipo,
+form #titulo {
+	width: 97.5% !important;
+}
+
+form select:focus {
+	outline: none;
 }
 
 form label {
@@ -50,19 +81,27 @@ div .form-group.col-md-6 {
 	float: left;
 }
 
-form > div > #nombre::placeholder {
-	color: rgb(221, 219, 219);
-}
-
-.lista-etapas {
+.lista-etapas,
+.operadores,
+.titulo {
 	list-style: none;
 	padding: 0;
 }
 
-form > div > a {
+form > div > a,
+form > div > label > i {
 	font-size: 1.75rem;
 	color:#FF5349;
 	vertical-align: middle;
+}
+
+form > div > label > i {
+	color: #99663D;
+}
+
+form > div > label > i:hover {
+	color: #663300;
+	cursor: pointer;
 }
 
 form > div > a:hover {
@@ -77,4 +116,12 @@ form > div > a:hover {
 
 .row {
 	margin: 0;
+}
+
+.sentencia input {
+	display: none;
+}
+
+.sentencia input:checked + i {
+	color: #663300;
 }

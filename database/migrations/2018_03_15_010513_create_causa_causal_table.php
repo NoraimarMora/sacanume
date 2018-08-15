@@ -15,12 +15,12 @@ class CreateCausaCausalTable extends Migration
     {
         Schema::create('causa_causal', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('num_causal');
             $table->integer('causa_id')->unsigned();
             $table->foreign('causa_id')->references('id')->on('causas');
             $table->integer('causal_id')->unsigned();
             $table->foreign('causal_id')->references('id')->on('causales');
             $table->boolean('sentencia')->default(false);
-            $table->unique(['causa_id', 'causal_id']);
             $table->timestamps();
         });
     }

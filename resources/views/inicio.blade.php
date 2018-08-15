@@ -33,23 +33,26 @@
             <p>Operadores</p>
         </a>
     </li>
-    <li>
+    <li id="menu_usuario">
         <a href="{{ action('UsuarioController@index') }}">
             <i class="fa fa-user"></i>
             <p>Usuarios</p>
         </a>
     </li>
     <li>
-        <a href="{{ action('ConfiguracionController@index') }}">
+        <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
             <p>Configuracion</p>
         </a>
     </li>
     <li>
-        <a href="#">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
@@ -63,7 +66,7 @@
             </li>
             @foreach($causas as $causa)
                 <li class="">
-                    <a href="{{ action('CausaController@show', ['causa' => $causa]) }}" id="{{ $causa->id }}">
+                    <a href="{{ action('CausaController@show', ['id' => $causa->id]) }}" id="{{ $causa->id }}">
                         <p>{{ $causa->nombre }}</p>
                     </a>
                 </li>
@@ -79,12 +82,18 @@
                 </li>
                 <li>
                     <p>Causas en Fase Previa: {{ $estadisticas['c_fase_previa'] }}</p>
-                </li><li>
+                </li>
+                <li>
                     <p>Causas en Proceso: {{ $estadisticas['c_proceso'] }}</p>
-                </li><li>
+                </li>
+                <li>
                     <p>Causas en Fase de Prueba: {{ $estadisticas['c_fase_prueba'] }}</p>
-                </li><li>
+                </li>
+                <li>
                     <p>Causas Finalizadas: {{ $estadisticas['c_finalizada'] }}</p>
+                </li>
+                <li>
+                    <p>Causas Sentenciadas: {{ $estadisticas['c_sentenciada'] }}</p>
                 </li>
             </ul>
         </div>
@@ -97,14 +106,15 @@
             new Chart(cxt, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Fase Previa', 'Proceso', 'Fase de Prueba', 'Finalizada'],
+                    labels: ['Fase Previa', 'Proceso', 'Fase de Prueba', 'Finalizada', 'Sentenciada'],
                     datasets: [{
                         label: 'My first dataset',
                         data: [<?php echo $estadisticas['c_fase_previa']?>, 
                                <?php echo $estadisticas['c_proceso']?>, 
                                <?php echo $estadisticas['c_fase_prueba']?>, 
-                               <?php echo $estadisticas['c_finalizada']?>],
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCD56', '#4BC0C0']
+                               <?php echo $estadisticas['c_finalizada']?>,
+                               <?php echo $estadisticas['c_sentenciada']?>],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCD56', '#4BC0C0', '#4D394B']
                     }]
                 }
             })

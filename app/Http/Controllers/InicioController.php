@@ -21,12 +21,13 @@ class InicioController extends Controller
         $c_proceso       = 0;
         $c_fase_pruebas  = 0;
         $c_finalizada    = 0;
+        $c_sentenciada   = 0;
 
         $ultimas_causas = $causas->sortByDesc('id')->take(5);
         
         foreach($causas as $causa) {
             if($causa->etapa) {
-                switch($causa->etapa->fase->id) {
+                switch($causa->etapa->fase_id) {
                     case 1:
                         $c_fase_previa++;
                         break;
@@ -41,15 +42,24 @@ class InicioController extends Controller
                         break; 
                 }
             }
+            if(count($causa->causales) > 0) {
+                foreach ($causa->causales as $causal) {
+                    if($causal->pivot->sentencia) {
+                        $c_sentenciada++;
+                        break;
+                    }
+                }
+            }
         }
 
         $estadisticas = array();
 
-        $estadisticas['c_registradas']  = $c_registradas;
-        $estadisticas['c_fase_previa']  = $c_fase_previa;
-        $estadisticas['c_proceso']      = $c_proceso;
-        $estadisticas['c_fase_prueba']  = $c_fase_pruebas;
-        $estadisticas['c_finalizada']   = $c_finalizada;
+        $estadisticas['c_registradas']   = $c_registradas;
+        $estadisticas['c_fase_previa']   = $c_fase_previa;
+        $estadisticas['c_proceso']       = $c_proceso;
+        $estadisticas['c_fase_prueba']   = $c_fase_pruebas;
+        $estadisticas['c_finalizada']    = $c_finalizada;
+        $estadisticas['c_sentenciada']   = $c_sentenciada;
 
         return view('inicio', ['causas' => $ultimas_causas, 'estadisticas' => $estadisticas]);
     }

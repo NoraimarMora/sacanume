@@ -11,20 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
+Route::get('/', 'Auth\LoginController@index');
+
+Route::get('/inicio', 'InicioController@index')->name('inicio')->middleware('auth');
+
+Route::resource('/causas', 'CausaController')->middleware('auth');
+
+Route::resource('/causales', 'CausalController')->middleware('auth');
+
+Route::resource('/operadores', 'OperadorController')->middleware('auth');
+
+Route::resource('/usuarios', 'UsuarioController')->middleware('auth');
+
+Route::resource('/configuracion', 'ConfiguracionController')->middleware('auth');
 
 Auth::routes();
-
-Route::get('/inicio', 'InicioController@index');
-
-Route::resource('/causas', 'CausaController');
-
-Route::resource('/causales', 'CausalController');
-
-Route::resource('/operadores', 'OperadorController');
-
-Route::resource('/usuarios', 'UsuarioController');
-
-Route::resource('/configuracion', 'ConfiguracionController');

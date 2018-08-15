@@ -16,7 +16,7 @@ class CreateCausasTable extends Migration
         Schema::create('causas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre')->unique();
-            $table->integer('num_exp'); // Combinacion de un numero secuencial y el año de registro
+            $table->string('num_exp')->unique(); // Combinacion de un numero secuencial y el año de registro
             $table->integer('etapa_id')->unsigned()->nullable();
             $table->foreign('etapa_id')->references('id')->on('etapas');
             $table->string('etapas_completadas')->nullable();

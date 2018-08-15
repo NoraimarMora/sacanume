@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Usuario;
+use Validator;
 
 class ConfiguracionController extends Controller
 {
@@ -14,7 +15,6 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        return view('configuracion');
     }
 
     /**
@@ -32,7 +32,7 @@ class ConfiguracionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
     }
 
@@ -42,7 +42,7 @@ class ConfiguracionController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show()
     {
     }
 
@@ -52,8 +52,11 @@ class ConfiguracionController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
+        $usuario = Usuario::find($id);
+
+        return view('configuracion', ['usuario' => $usuario]);
     }
 
     /**
@@ -63,8 +66,21 @@ class ConfiguracionController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
+        $usuario = Usuario::find($id);
+
+        $usuario->nombre = $request->nombre;
+        $usuario->apellido = $request->apellido;
+        $usuario->username = strtolower($usuario->nombre)[0] . strtolower($usuario->apellido) . '.' . $usuario->id;
+
+        if($request->password) {
+            $usuario->password = bcrypt($request->password);
+        }
+
+        $usuario->save();
+
+        return redirect()->action('ConfiguracionController@edit', ['id' => $id])->with('message', 'Informacion actualizada con exito!');
     }
 
     /**
@@ -73,7 +89,7 @@ class ConfiguracionController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy()
     {
 	}
 }

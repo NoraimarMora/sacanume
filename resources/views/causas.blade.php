@@ -1,7 +1,7 @@
 @extends('global')
 
 @section('estilos_sublayout')
-    <link rel="stylesheet" href="{{ asset('css/causas.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/listado.css') }}">
 @endsection
 
 @section('estado_menu')
@@ -29,31 +29,48 @@
             <p>Operadores</p>
         </a>
     </li>
-    <li>
+    <li id="menu_usuario">
         <a href="{{ action('UsuarioController@index') }}">
             <i class="fa fa-user"></i>
             <p>Usuarios</p>
         </a>
     </li>
     <li>
-        <a href="{{ action('ConfiguracionController@index') }}">
+        <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
             <p>Configuracion</p>
         </a>
     </li>
     <li>
-        <a href="#">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
 @section('controller')
-    {{ action('CausaController@create') }}
+{{ action('CausaController@create') }}
+@endsection
+
+@section('buscador')
+{{ action('CausaController@index') }}
+@endsection
+
+@section('buscar')
+causa...
 @endsection
 
 @section('contenido_sublayout')
+    @if(session('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
+    
     <div class="lista">
         <table class="table-hover">
             <thead>
@@ -61,10 +78,16 @@
                     <th class="text-center"># Exp.</th>
                     <th>Nombre</th>
                     <th>Estado</th>
-                    <th class="text-center">Accion</th>                                        
+                    <th class="text-center accion" id="accion">Accion</th>                              
                 </tr>
             </thead>
             <tbody>
+                @if(count($causas) == 0)
+                    <tr>
+                        <td class="text-center" colspan="4">No se encontraron registros</td>
+                    </tr>
+                @endif
+
                 @foreach($causas as $causa)
                     <tr>
                         <td class="text-center">{{ $causa->num_exp }}</td>
@@ -76,18 +99,93 @@
                                 {{ $causa->etapa->descripcion }}
                             @endif
                         </td>
-                        <td class="text-center">
-                            <form id="editar{{ $causa->id }}" action="{{ action('CausaController@edit', ['causa' => $causa]) }}">
+                        <td class="text-center accion">
+                            <form id="editar{{ $causa->id }}" action="{{ action('CausaController@edit', ['id' => $causa->id]) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
-                            <form id="eliminar{{ $causa->id }}" action="{{ action('CausaController@destroy', ['causa' => $causa]) }}" method="post">
+                            <form id="eliminar{{ $causa->id }}" action="{{ action('CausaController@destroy', ['id' => $causa->id]) }}" method="post">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
+                            <button class="btn btn-info btn-icon btn-sm " type="button" data-toggle="modal" data-target="#modal_causa{{ $causa->id }}"><i class="fa fa-eye"></i></button>
                             <button class="btn btn-success btn-icon btn-sm " type="submit" form="editar{{ $causa->id }}"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-icon btn-sm " type="submit" form="eliminar{{ $causa->id }}"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-danger btn-icon btn-sm " type="submit" form="eliminar{{ $causa->id }}" onclick="return confirm('Esta seguro que desea eliminar el registro?');"><i class="fa fa-trash"></i></button>
                         </td>                        
                     </tr>
+                    <div id="modal_causa{{ $causa->id }}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" style="color: #FF5349;">{{ $causa->nombre }}</h3>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Numero de expediente: {{ $causa->num_exp }}</p>
+                                    <p>
+                                        Estado: 
+                                        @if($causa->etapa)
+                                            {{ $causa->etapa->fase->descripcion }} 
+                                            <i class="fa fa-arrow-right"></i> 
+                                            {{ $causa->etapa->descripcion }}
+                                        @endif
+                                    </p>
+                                    @if(count($causa->causales) > 0)
+                                        <p>Causales:</p>
+                                        <ul>
+                                            @foreach($causa->causales as $causal)
+                                                <li>
+                                                    <p>{{ $causal->cannon }}
+                                                        @if($causal->numero)
+                                                            , {{ $causal->numero }}
+                                                        @endif    
+                                                        <i class="fa fa-arrow-right"></i> 
+                                                        {{ $causal->descripcion }}</p>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p>Causales: Aun no se han definido</p>
+                                    @endif
+                                    @if(count($causa->operadores) > 0)
+                                        <p>Operadores:</p>
+                                        <ul>
+                                            @foreach($causa->operadores as $operador)
+                                                @switch($operador->pivot->cargo)
+                                                    @case(1)
+                                                        <li>
+                                                            <p>Juez: {{ $operador->nombre }} {{ $operador->apellido }}</p>
+                                                        </li>
+                                                        @break
+                                                    @case(2)
+                                                        <li>
+                                                            <p>Conjuez: {{ $operador->nombre }} {{ $operador->apellido }}</p>
+                                                        </li>
+                                                        @break
+                                                    @case(3)
+                                                        <li>
+                                                            <p>Conjuez: {{ $operador->nombre }} {{ $operador->apellido }}</p> 
+                                                        </li>
+                                                        @break
+                                                    @case(4)
+                                                        <li>
+                                                            <p>Defensor del Vinculo: {{ $operador->nombre }} {{ $operador->apellido }}</p> 
+                                                        </li>
+                                                        @break
+                                                    @case(5)
+                                                        <li>
+                                                            <p>Patrono Estable: {{ $operador->nombre }} {{ $operador->apellido }}</p>
+                                                        </li>
+                                                        @break
+                                                @endswitch
+                                            @endforeach           
+                                        </ul>
+                                    @else
+                                        <p>Operadores: Aun no se han definido</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
             </tbody>
         </table>

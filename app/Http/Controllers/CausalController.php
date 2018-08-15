@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Causal;
+use Validator;
 
 class CausalController extends Controller
 {
@@ -12,9 +13,10 @@ class CausalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $causales = Causal::orderBy('cannon', 'numero')->paginate(10);
+        $causales = Causal::search($request->busqueda)->orderBy('cannon')->paginate(10);
+
         return view('causales', ['causales' => $causales]);
     }
 
@@ -36,13 +38,30 @@ class CausalController extends Controller
      */
     public function store(Request $request)
     {
+        $messages = [
+            'cannon.required' => 'El Cannon es obligatorio',
+            'descripcion.required' => 'La Descripcion es obligatorio',
+            'numero.numeric' => 'El Numero debe ser un valor numerico'
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'cannon' => 'required',
+            'descripcion' => 'required',
+            'numero' => 'numeric'
+        ], $messages);
+
+        if($validator->fails()) {
+            return redirect()->action('CausalController@create')->withErrors($validator);
+        }
+
         $causal = new Causal();
+
         $causal->cannon = $request->cannon;
         $causal->numero = $request->numero;
         $causal->descripcion = $request->descripcion; 
         $causal->save();
         
-        return $this->index();
+        return redirect()->action('CausalController@index')->with('message', 'Causal creado con exito!');
     }
 
     /**
@@ -61,8 +80,10 @@ class CausalController extends Controller
      * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function edit(Causal $causal)
+    public function edit($id)
     {
+        $causal = Causal::find($id);
+
         return view('causales/update', ['causal' => $causal]);
     }
 
@@ -73,14 +94,32 @@ class CausalController extends Controller
      * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Causal $causa)
+    public function update(Request $request, $id)
     {
+        $messages = [
+            'cannon.required' => 'El Cannon es obligatorio',
+            'descripcion.required' => 'La Descripcion es obligatorio',
+            'numero.numeric' => 'El Numero debe ser un valor numerico'
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'cannon' => 'required',
+            'descripcion' => 'required',
+            'numero' => 'numeric'
+        ], $messages);
+
+        if($validator->fails()) {
+            return redirect()->action('CausalController@edit', ['id' => $id])->withErrors($validator);
+        }
+
+        $causal = Causal::find($id);
+
         $causal->cannon = $request->cannon;
         $causal->numero = $request->numero;
         $causal->descripcion = $request->descripcion; 
         $causal->save();
         
-        return $this->index();
+        return redirect()->action('CausalController@index')->with('message', 'Causal actualizado con exito!');
     }
 
     /**
@@ -89,9 +128,16 @@ class CausalController extends Controller
      * @param  \App\Causal  $causal
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Causal $causal)
+    public function destroy($id)
     {
+        $causal = Causal::find($id);
+
+        foreach ($causal->causas as $causa) {
+            $causa->pivot->delete();
+        }
+
         $causal->delete();
-        return $this->index();
+        
+        return redirect()->action('CausalController@index')->with('message', 'Causal eliminado con exito!');
 	}
 }

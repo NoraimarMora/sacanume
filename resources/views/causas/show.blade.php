@@ -30,23 +30,26 @@
             <p>Operadores</p>
         </a>
     </li>
-    <li>
+    <li id="menu_usuario">
         <a href="{{ action('UsuarioController@index') }}">
             <i class="fa fa-user"></i>
             <p>Usuarios</p>
         </a>
     </li>
     <li>
-        <a href="{{ action('ConfiguracionController@index') }}">
+        <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
             <p>Configuracion</p>
         </a>
     </li>
     <li>
-        <a href="#">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa fa-sign-out-alt"></i>
             <p>Salir</p>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
@@ -64,7 +67,7 @@
                 @else
                     <li class="">
                 @endif
-                        <a href="{{ action('CausaController@show', ['causa' => $causa]) }}" id="{{ $causa->id }}">
+                        <a href="{{ action('CausaController@show', ['id' => $causa->id]) }}" id="{{ $causa->id }}">
                             <p>{{ $causa->nombre }}</p>
                         </a>
                     </li>
@@ -83,50 +86,59 @@
                     {{ $causa_actual->etapa->descripcion }}
                 @endif
             </p>
-            <p>Causales:</p>
-            <ul>
-                @foreach($causa_actual->causales as $causal)
-                    <li>
-                        <p>{{ $causal->cannon }}
-                            @if($causal->numero)
-                                , {{ $causal->numero }}
-                            @endif    
-                            > {{ $causal->nombre }}</p>
-                    </li>
-                @endforeach
-            </ul>
-            <p>Operadores:</p>
+            @if(count($causa_actual->causales) > 0)
+                <p>Causales:</p>
+                <ul>
+                    @foreach($causa_actual->causales as $causal)
+                        <li>
+                            <p>{{ $causal->cannon }}
+                                @if($causal->numero)
+                                    , {{ $causal->numero }}
+                                @endif    
+                                <i class="fa fa-arrow-right"></i> 
+                                {{ $causal->descripcion }}</p>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Causales: Aun no se han definido</p>
+            @endif
+            @if(count($causa_actual->operadores) > 0)
+                <p>Operadores:</p>
                 <ul>
                     @foreach($causa_actual->operadores as $operador)
-                        @switch($operador->cargo)
+                        @switch($operador->pivot->cargo)
                             @case(1)
                                 <li>
-                                    <p>Presidente del Turno: {{ $operador->nombre }}</p>
+                                    <p>Juez: {{ $operador->nombre }} {{ $operador->apellido }}</p>
                                 </li>
                                 @break
                             @case(2)
                                 <li>
-                                    <p>Conjuez: {{ $operador->nombre }}</p>
+                                    <p>Conjuez: {{ $operador->nombre }} {{ $operador->apellido }}</p>
                                 </li>
                                 @break
                             @case(3)
                                 <li>
-                                    <p>Conjuez: {{ $operador->nombre }}</p> 
+                                    <p>Conjuez: {{ $operador->nombre }} {{ $operador->apellido }}</p> 
                                 </li>
                                 @break
                             @case(4)
                                 <li>
-                                    <p>Defensor del Vinculo: {{ $operador->nombre }}</p> 
+                                    <p>Defensor del Vinculo: {{ $operador->nombre }} {{ $operador->apellido }}</p> 
                                 </li>
                                 @break
                             @case(5)
                                 <li>
-                                    <p>Patrono Estable: {{ $operador->nombre }}</p>
+                                    <p>Patrono Estable: {{ $operador->nombre }} {{ $operador->apellido }}</p>
                                 </li>
                                 @break
                         @endswitch
                     @endforeach           
                 </ul>
+            @else
+                <p>Operadores: Aun no se han definido</p>
+            @endif
         </div>
     </div>
 @endsection
