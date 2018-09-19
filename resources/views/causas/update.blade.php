@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('css/create.css') }}">
 @endsection
 
+@section('scripts_sublayout')
+    <script type="text/javascript" src="{{ asset('js/funciones.js') }}"></script>
+@endsection
+
 @section('estado_menu')
     <li>
         <a href="{{ action('InicioController@index') }}">
@@ -24,6 +28,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -38,7 +48,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -75,7 +85,7 @@
                     <input type="text" class="form-control" name="nombre" id="nombre" value="{{ $causa->nombre }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="num_exp">* <strong>Numero de Expediente:</strong></label>
+                    <label for="num_exp">* <strong>Número de Expediente:</strong></label>
                     <input type="text" class="form-control" name="num_exp" id="num_exp" value="{{ $causa->num_exp }}">
                 </div>
             </div>
@@ -95,9 +105,9 @@
                 </select>
                 <label class="sentencia">
                     @if($cSeleccionados['sentencia1'])
-                        <input type="checkbox" name="sentencia1" class="sentencia" checked><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia1" id="sentencia1" class="sentencia" checked><i class="fa fa-gavel"></i>
                     @else
-                        <input type="checkbox" name="sentencia1" class="sentencia"><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia1" id="sentencia1" class="sentencia"><i class="fa fa-gavel"></i>
                     @endif
                 </label>
                 <br>
@@ -114,9 +124,9 @@
                 </select>
                 <label class="sentencia">
                     @if($cSeleccionados['sentencia2'])
-                        <input type="checkbox" name="sentencia2" class="sentencia" checked><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia2" id="sentencia2" class="sentencia" checked><i class="fa fa-gavel"></i>
                     @else
-                        <input type="checkbox" name="sentencia2" class="sentencia"><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia2" id="sentencia2" class="sentencia"><i class="fa fa-gavel"></i>
                     @endif
                 </label>
                 <br>
@@ -133,11 +143,20 @@
                 </select>
                 <label class="sentencia">
                     @if($cSeleccionados['sentencia3'])
-                        <input type="checkbox" name="sentencia3" class="sentencia" checked><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia3" id="sentencia3" class="sentencia" checked><i class="fa fa-gavel"></i>
                     @else
-                        <input type="checkbox" name="sentencia3" class="sentencia"><i class="fa fa-gavel"></i>
+                        <input type="checkbox" name="sentencia3" id="sentencia3" class="sentencia"><i class="fa fa-gavel"></i>
                     @endif
                 </label>
+            </div>
+            <div class="form-group col-md-12">
+                <label><strong>Fecha de Sentencia</strong></label>
+                <br>
+                @if($causa->fecha_sentencia)
+                    <input type="date" name="fecha_sentencia" id="fecha_sentencia" class="form-control" value="{{ $causa->fecha_sentencia }}">
+                @else
+                    <input type="date" name="fecha_sentencia" id="fecha_sentencia" class="form-control" disabled>
+                @endif
             </div>
             <div class="form-group col-md-12">
                 <label><strong>Etapas:</strong></label>
@@ -151,13 +170,22 @@
                                 <input type="checkbox" name="etapa[]" value="{{ $etapa->id }}">
                                 {{ $etapa->descripcion }}.
                             @endif
-                            <!--@if($etapa->id == 6)
-                                &nbsp;Fecha:
-                                <input type="date" class="form-control" name="fecha" id="fecha">
-                            @endif-->
                         </li>
                     @endforeach
                 </ul>
+            </div>
+            <div class="form-group col-md-12">
+                <label><strong>Procedimiento</strong></label>
+                <br>
+                @if($causa->procedimiento == 1)
+                    <input type="radio" name="procedimiento" value="1" checked> Procedimiento Ordinario
+                    <br>
+                    <input type="radio" name="procedimiento" value="2"> Procedimiento Breve  
+                @else
+                    <input type="radio" name="procedimiento" value="1"> Procedimiento Ordinario
+                    <br>
+                    <input type="radio" name="procedimiento" value="2" checked> Procedimiento Breve  
+                @endif              
             </div>
             <div class="form-group col-md-12">
                 <label><strong>Operadores:</strong></label>
@@ -176,32 +204,62 @@
                             @endforeach
                         </select>
                     </li>
-                    <li>
-                        <label>Conjuez: </label>&nbsp;&nbsp;
-                        <select name="conjuez1" class="operador" style="width: 85.05%;">
-                            <option value="0">---</option>
-                            @foreach($operadores as $operador)
-                                @if($operador->id == $cargos['conjuez1'])
-                                    <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
-                                @else
-                                    <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </li>
-                    <li>
-                        <label>Conjuez: </label>&nbsp;&nbsp;
-                        <select name="conjuez2" class="operador" style="width: 85.1%;">
-                            <option value="0">---</option>
-                            @foreach($operadores as $operador)
-                                @if($operador->id == $cargos['conjuez2'])
-                                    <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
-                                @else
-                                    <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </li>
+                    <div id="ordinario">
+                        <li>
+                            <label>Conjuez: </label>&nbsp;&nbsp;
+                            <select name="conjuez1" class="operador" style="width: 85.05%;">
+                                <option value="0">---</option>
+                                @foreach($operadores as $operador)
+                                    @if($operador->id == $cargos['conjuez1'])
+                                        <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @else
+                                        <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </li>
+                        <li>
+                            <label>Conjuez: </label>&nbsp;&nbsp;
+                            <select name="conjuez2" class="operador" style="width: 85.1%;">
+                                <option value="0">---</option>
+                                @foreach($operadores as $operador)
+                                    @if($operador->id == $cargos['conjuez2'])
+                                        <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @else
+                                        <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </li>
+                    </div>
+                    <div id="breve" hidden>
+                        <li>
+                            <label>Instructor: </label>&nbsp;&nbsp;
+                            <select name="instructor" id="instructor" class="operador" style="width: 83.55%;">
+                                <option value="0">---</option>
+                                @foreach($operadores as $operador)
+                                    @if($operador->id == $cargos['conjuez2'])
+                                        <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @else
+                                        <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </li>
+                        <li>
+                            <label>Asesor: </label>&nbsp;&nbsp;
+                            <select name="asesor" id="asesor" class="operador" style="width: 86.2%;">
+                                <option value="0">---</option>
+                                @foreach($operadores as $operador)
+                                    @if($operador->id == $cargos['conjuez2'])
+                                        <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @else
+                                        <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </li>
+                    </div>
                     <li>
                         <label>Defensor del vinculo: </label>&nbsp;&nbsp;
                         <select name="defensor" class="operador" style="width: 73.5%;">
@@ -221,6 +279,32 @@
                             <option value="0">---</option>
                             @foreach($operadores as $operador)
                                 @if($operador->id == $cargos['abogado'])
+                                    <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                @else
+                                    <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </li>
+                    <li>
+                        <label>Vicario Judicial: </label>&nbsp;&nbsp;
+                        <select name="vicario" class="operador" style="width: 78.2%;">
+                            <option value="0">---</option>
+                            @foreach($operadores as $operador)
+                                @if($operador->id == $cargos['vicario'])
+                                    <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                @else
+                                    <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </li>
+                    <li>
+                        <label>Notario: </label>&nbsp;&nbsp;
+                        <select name="notario" class="operador" style="width: 85.5%;">
+                            <option value="0">---</option>
+                            @foreach($operadores as $operador)
+                                @if($operador->id == $cargos['notario'])
                                     <option value="{{ $operador->id }}" selected>{{ $operador->nombre }} {{ $operador->apellido }}</option>
                                 @else
                                     <option value="{{ $operador->id }}">{{ $operador->nombre }} {{ $operador->apellido }}</option>

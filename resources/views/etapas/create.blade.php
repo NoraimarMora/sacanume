@@ -23,13 +23,13 @@
             <p>Causales</p>
         </a>
     </li>
-    <li>
+    <li class="active">
         <a href="{{ action('EtapaController@index') }}">
             <i class="fa fa-list"></i>
             <p>Etapas</p>
         </a>
     </li>
-    <li class="active">
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -70,27 +70,26 @@
             </div>
         @endif
         
-        <form id="nuevo_operador" action="{{ action('OperadorController@store') }}" method="POST">
-            <h3><strong>Nuevo Operador</strong></h3>
+        <form id="nueva_etapa" action="{{ action('EtapaController@store') }}" method="POST">
+            <h3><strong>Nueva Etapa</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="nombre">* <strong>Nombre:</strong></label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre') }}">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="apellido">* <strong>Apellido:</strong></label>
-                    <input type="text" class="form-control" name="apellido" id="apellido" value="{{ old('apellido') }}">
-                </div>
+            <div class="form-group col-md-12" id="select">
+                <label for="descripcion">* <strong>Descripción:</strong></label>
+                <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ old('descripcion') }}">
             </div>
+            <br>
             <div class="form-group col-md-12">
-                <label for="titulo">* <strong>Título:</strong></label>
+                <label for="fase">* <strong>Fase:</strong></label>
                 <br>
-                <select id="titulo" name="titulo">
-                    <option value="Monseñor" selected>Monseñor</option>
-                    <option value="Licenciado/a">Licenciado/a</option>
-                    <option value="Otro">Otro</option>
+                <select id="fase" name="fase">
+                    @foreach($fases as $fase)
+                        @if($fase->id == 1)
+                            <option value="{{ $fase->id }}" selected>{{ $fase->descripcion }}</option>
+                        @else
+                            <option value="{{ $fase->id }}">{{ $fase->descripcion }}</option>
+                        @endif
+                    @endforeach
                 </select>
             </div>
             <div class="row">

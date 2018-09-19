@@ -24,6 +24,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -38,7 +44,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -71,16 +77,16 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="cannon">* <strong>Cannon:</strong></label>
-                    <input type="text" class="form-control" name="cannon" id="cannon">
+                    <input type="text" class="form-control" name="cannon" id="cannon" value="{{ old('cannon') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="numero"><strong>Numero:</strong></label>
-                    <input type="number" class="form-control" name="numero" id="numero" min="1">
+                    <label for="numero"><strong>Número:</strong></label>
+                    <input type="number" class="form-control" name="numero" id="numero" min="1" value="{{ old('numero') }}">
                 </div>
             </div>
             <div class="form-group col-md-12" id="select">
-                <label for="causales">* <strong>Descripcion:</strong></label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion">
+                <label for="causales">* <strong>Descripción:</strong></label>
+                <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ old('descripcion') }}">
             </div>
             <br>
             <div class="row">

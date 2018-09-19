@@ -49,7 +49,7 @@ class UsuarioController extends Controller
         ], $messages);
 
         if($validator->fails()) {
-            return redirect()->action('UsuarioController@create')->withErrors($validator);
+            return redirect()->action('UsuarioController@create')->withErrors($validator)->withInput();
         }
 
         $usuario = new Usuario();
@@ -63,7 +63,7 @@ class UsuarioController extends Controller
         $usuario->username .= $usuario->id;
         $usuario->save();
 
-        return redirect()->action('UsuarioController@index')->with('message', 'Usuario creado con exito!');
+        return redirect()->action('UsuarioController@index')->with('message', '¡Usuario creado con éxito!');
     }
 
     /**
@@ -125,7 +125,7 @@ class UsuarioController extends Controller
         $usuario->tipo = $request->tipo;
         $usuario->save();
 
-        return redirect()->action('UsuarioController@index')->with('message', 'Usuario actualizado con exito!');
+        return redirect()->action('UsuarioController@index')->with('message', '¡Usuario actualizado con éxito!');
     }
 
     /**
@@ -140,6 +140,6 @@ class UsuarioController extends Controller
 
         $usuario->delete();
 
-        return redirect()->action('UsuarioController@index')->with('message', 'Usuario eliminado con exito!');
+        return redirect()->action('UsuarioController@index')->with('message', '¡Usuario eliminado con éxito!');
 	}
 }

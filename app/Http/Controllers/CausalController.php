@@ -40,28 +40,28 @@ class CausalController extends Controller
     {
         $messages = [
             'cannon.required' => 'El Cannon es obligatorio',
-            'descripcion.required' => 'La Descripcion es obligatorio',
-            'numero.numeric' => 'El Numero debe ser un valor numerico'
+            'cannon.numeric' => 'El Cannon debe ser un valor numérico',
+            'descripcion.required' => 'La Descripción es obligatoria',
+            'numero.numeric' => 'El Número debe ser un valor numérico'
         ];
 
         $validator = Validator::make($request->all(), [
-            'cannon' => 'required',
+            'cannon' => 'required|numeric',
             'descripcion' => 'required',
-            'numero' => 'numeric'
+            'numero' => 'nullable|numeric'
         ], $messages);
 
         if($validator->fails()) {
-            return redirect()->action('CausalController@create')->withErrors($validator);
+            return redirect()->action('CausalController@create')->withErrors($validator)->withInput();
         }
 
         $causal = new Causal();
-
         $causal->cannon = $request->cannon;
         $causal->numero = $request->numero;
         $causal->descripcion = $request->descripcion; 
         $causal->save();
         
-        return redirect()->action('CausalController@index')->with('message', 'Causal creado con exito!');
+        return redirect()->action('CausalController@index')->with('message', '¡Causal creado con éxito!');
     }
 
     /**
@@ -98,14 +98,14 @@ class CausalController extends Controller
     {
         $messages = [
             'cannon.required' => 'El Cannon es obligatorio',
-            'descripcion.required' => 'La Descripcion es obligatorio',
-            'numero.numeric' => 'El Numero debe ser un valor numerico'
+            'descripcion.required' => 'La Descripción es obligatorio',
+            'numero.numeric' => 'El Número debe ser un valor numérico'
         ];
 
         $validator = Validator::make($request->all(), [
             'cannon' => 'required',
             'descripcion' => 'required',
-            'numero' => 'numeric'
+            'numero' => 'nullable|numeric'
         ], $messages);
 
         if($validator->fails()) {
@@ -113,13 +113,12 @@ class CausalController extends Controller
         }
 
         $causal = Causal::find($id);
-
         $causal->cannon = $request->cannon;
         $causal->numero = $request->numero;
         $causal->descripcion = $request->descripcion; 
         $causal->save();
         
-        return redirect()->action('CausalController@index')->with('message', 'Causal actualizado con exito!');
+        return redirect()->action('CausalController@index')->with('message', '¡Causal actualizado con éxito!');
     }
 
     /**
@@ -138,6 +137,6 @@ class CausalController extends Controller
 
         $causal->delete();
         
-        return redirect()->action('CausalController@index')->with('message', 'Causal eliminado con exito!');
+        return redirect()->action('CausalController@index')->with('message', '¡Causal eliminado con éxito!');
 	}
 }

@@ -24,6 +24,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -38,7 +44,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -70,6 +76,12 @@ causal...
             {{ session('message') }}
         </div>
     @endif
+
+    <style type="text/css">
+        #file_button {
+            display: none;
+        }
+    </style>
     
     <div class="lista">
         <table class="table-hover">
@@ -77,8 +89,8 @@ causal...
                 <tr>
                     <th class="text-center">Cannon</th>
                     <th class="text-center">#</th>
-                    <th class="text-center">Descripcion</th>
-                    <th class="text-center accion" id="accion">Accion</th>                                        
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center accion" id="accion">Acción</th>                                        
                 </tr>
             </thead>
             <tbody>

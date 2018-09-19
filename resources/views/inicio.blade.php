@@ -28,6 +28,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -42,7 +48,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -75,25 +81,25 @@
     </div>
     <div class="content-section col-md-9">
         <div class="est-content">
-            <h4>Estadisticas del Sistema</h4>
+            <h4><strong>Estadísticas del Sistema</strong></h4>
             <ul class="estadisticas">
                 <li>
-                    <p>Causas registradas: {{ $estadisticas['c_registradas'] }}</p>
+                    <p><strong>Causas registradas:</strong> {{ $estadisticas['c_registradas'] }}</p>
                 </li>
                 <li>
-                    <p>Causas en Fase Previa: {{ $estadisticas['c_fase_previa'] }}</p>
+                    <p><strong>Causas en Fase Previa:</strong> {{ $estadisticas['c_fase_previa'] }}</p>
                 </li>
                 <li>
-                    <p>Causas en Proceso: {{ $estadisticas['c_proceso'] }}</p>
+                    <p><strong>Causas en Proceso:</strong> {{ $estadisticas['c_proceso'] }}</p>
                 </li>
                 <li>
-                    <p>Causas en Fase de Prueba: {{ $estadisticas['c_fase_prueba'] }}</p>
+                    <p><strong>Causas en Fase de Prueba:</strong> {{ $estadisticas['c_fase_prueba'] }}</p>
                 </li>
                 <li>
-                    <p>Causas Finalizadas: {{ $estadisticas['c_finalizada'] }}</p>
+                    <p><strong>Causas Finalizadas:</strong> {{ $estadisticas['c_finalizada'] }}</p>
                 </li>
                 <li>
-                    <p>Causas Sentenciadas: {{ $estadisticas['c_sentenciada'] }}</p>
+                    <p><strong>Causas Sentenciadas:</strong> {{ $estadisticas['c_sentenciada'] }}</p>
                 </li>
             </ul>
         </div>

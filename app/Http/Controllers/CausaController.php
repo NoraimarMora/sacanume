@@ -9,8 +9,12 @@ use App\Etapa;
 use App\Causal;
 use App\Operador;
 use Validator;
+use Barryvdh\DomPDF\Facade as PDF;
+
+
 
 class CausaController extends Controller
+
 {
     /**
      * Display a listing of the resource.
@@ -48,10 +52,10 @@ class CausaController extends Controller
     {
         $messages = [
             'nombre.required' => 'El Nombre es obligatorio',
-            'nombre.unique' => 'El Nombre debe ser unico',
-            'num_exp.required' => 'El Numero de Expediente es obligatorio',
-            'num_exp.unique' => 'El Numero de Expediente debe ser unico',
-            'num_exp.numeric' => 'El Numero de Expediente debe ser un valor numerico'
+            'nombre.unique' => 'El Nombre debe ser únixo',
+            'num_exp.required' => 'El Número de Expediente es obligatorio',
+            'num_exp.unique' => 'El Número de Expediente debe ser único',
+            'num_exp.numeric' => 'El Número de Expediente debe ser un valor numérico'
         ];
 
         $validator = Validator::make($request->all(), [
@@ -60,13 +64,12 @@ class CausaController extends Controller
         ], $messages);
 
         if($validator->fails()) {
-            return redirect()->action('CausaController@create')->withErrors($validator);
+            return redirect()->action('CausaController@create')->withErrors($validator)->withInput();
         }
 
         $etapas = $request->etapa;
 
         $causa = new Causa();
-
         $causa->nombre = $request->nombre;
         $causa->num_exp = $request->num_exp;
 
@@ -77,6 +80,9 @@ class CausaController extends Controller
             $causa->etapa_id = NULL;
             $causa->etapas_completadas = NULL;
         }
+
+        $causa->procedimiento = $request->procedimiento;
+        $causa->fecha_sentencia = $request->fecha_sentencia;
 
         $causa->save();
 
@@ -127,24 +133,28 @@ class CausaController extends Controller
                 'cargo' => 1
             ]);
         }
+
         if($request->conjuez1 != 0) {
             $causa->operadores()->save($causa, [
                 'operador_id' => $request->conjuez1,
                 'cargo' => 2
             ]);
         }
+
         if($request->conjuez2 != 0) {
             $causa->operadores()->save($causa, [
                 'operador_id' => $request->conjuez2,
                 'cargo' => 3
             ]);
         }
+
         if($request->defensor != 0) {
             $causa->operadores()->save($causa, [
                 'operador_id' => $request->defensor,
                 'cargo' => 4
             ]);
         }
+
         if($request->abogado != 0) {
             $causa->operadores()->save($causa, [
                 'operador_id' => $request->abogado,
@@ -152,16 +162,43 @@ class CausaController extends Controller
             ]);
         }
 
+        if($request->vicario != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->vicario,
+                'cargo' => 6
+            ]);
+        }
+
+        if($request->notario != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->notario,
+                'cargo' => 7
+            ]);
+        }
+
+        if($request->instructor != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->instructor,
+                'cargo' => 8
+            ]);
+        }
+
+        if($request->asesor != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->asesor,
+                'cargo' => 9
+            ]);
+        }
+
         $causa->save();
 
-        return redirect()->action('CausaController@index')->with('message', 'Causa creada con exito!');
-        
+        return redirect()->action('CausaController@index')->with('message', '¡Causa creada con éxito!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Causa  $causa
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -175,7 +212,7 @@ class CausaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Causa  $user
+     * @param  \App\Causa  $causa
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -184,6 +221,7 @@ class CausaController extends Controller
         $etapas = Etapa::all();
         $operadores = Operador::all();
         $causales = Causal::all();
+
         $etapas_completadas = collect(unserialize($causa->etapas_completadas));
 
         $cSeleccionados = array();
@@ -212,11 +250,16 @@ class CausaController extends Controller
         }
 
         $cargos = array();
+
         $cargos['juez']     = 0;
         $cargos['conjuez1'] = 0;
         $cargos['conjuez2'] = 0;
         $cargos['defensor'] = 0;
         $cargos['abogado']  = 0;
+        $cargos['vicario']  = 0;
+        $cargos['notario']  = 0;
+        $cargos['instructor'] = 0;
+        $cargos['asesor'] = 0;
 
         foreach($causa->operadores as $operador) {
             switch ($operador->pivot->cargo) {
@@ -235,6 +278,18 @@ class CausaController extends Controller
                 case '5':
                     $cargos['abogado'] = $operador->pivot->operador_id;
                     break;
+                case '6':
+                    $cargos['vicario'] = $operador->pivot->operador_id;
+                    break;
+                case '7':
+                    $cargos['notario'] = $operador->pivot->operador_id;
+                    break;
+                case '8':
+                    $cargos['instructor'] = $operador->pivot->operador_id;
+                    break;
+                case '9':
+                    $cargos['asesor'] = $operador->pivot->operador_id;
+                    break;
             }
         }
 
@@ -251,8 +306,8 @@ class CausaController extends Controller
     {
         $messages = [
             'nombre.required' => 'El Nombre es obligatorio',
-            'num_exp.required' => 'El Numero de Expediente es obligatorio',
-            'num_exp.numeric' => 'El Numero de Expediente debe ser un valor numerico'
+            'num_exp.required' => 'El Número de Expediente es obligatorio',
+            'num_exp.numeric' => 'El Número de Expediente debe ser un valor numérico'
         ];
 
         $validator = Validator::make($request->all(), [
@@ -267,7 +322,6 @@ class CausaController extends Controller
         $etapas = $request->etapa;
 
         $causa = Causa::find($id);
-
         $causa->nombre = $request->nombre;
         $causa->num_exp = $request->num_exp;
 
@@ -278,6 +332,9 @@ class CausaController extends Controller
             $causa->etapa_id = NULL;
             $causa->etapas_completadas = NULL;
         }
+
+        $causa->procedimiento = $request->procedimiento;
+        $causa->fecha_sentencia = $request->fecha_sentencia;
 
         $causa->save();
 
@@ -329,7 +386,7 @@ class CausaController extends Controller
                     $sentencia = true;
                 else
                     $sentencia = false;
-                
+
                 DB::table('causa_causal')->where(['causa_id' => $causa->id, 'num_causal' => 2])->update(['causal_id' => $request->causal2, 'sentencia' => $sentencia]);
             } else {
                 DB::table('causa_causal')->where(['causa_id' => $causa->id, 'num_causal' => 2])->delete();
@@ -352,8 +409,8 @@ class CausaController extends Controller
                 if($request->sentencia3)
                     $sentencia = true;
                 else
-                    $sentencia = false;
-                
+                    $sentencia = false;                
+
                 DB::table('causa_causal')->where(['causa_id' => $causa->id, 'num_causal' => 3])->update(['causal_id' => $request->causal1, 'sentencia' => $sentencia]);
             } else {
                 DB::table('causa_causal')->where(['causa_id' => $causa->id, 'num_causal' => 3])->delete();
@@ -376,6 +433,10 @@ class CausaController extends Controller
         $conjuez2 = false;
         $defensor = false;
         $abogado = false;
+        $vicario = false;
+        $notario = false;
+        $instructor = false;
+        $asesor = false;
 
         foreach ($causa->operadores as $operador) {
             switch ($operador->pivot->cargo) {
@@ -393,6 +454,18 @@ class CausaController extends Controller
                     break;
                 case '5':
                     $abogado = true;
+                    break;
+                case '6':
+                    $vicario = true;
+                    break;
+                case '7':
+                    $notario = true;
+                    break;
+                case '8':
+                    $instructor = true;
+                    break;
+                case '9':
+                    $asesor = true;
                     break;
             }
         }
@@ -462,7 +535,59 @@ class CausaController extends Controller
             ]);
         }
 
-        return redirect()->action('CausaController@index')->with('message', 'Causa actualizada con exito!');
+        if($vicario) {
+            if($request->vicario != 0) {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 6])->update(['operador_id' => $request->vicario]);
+            } else {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 6])->delete();
+            }
+        } elseif (!$vicario && $request->vicario != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->vicario,
+                'cargo' => 6
+            ]);
+        }
+
+        if($notario) {
+            if($request->notario != 0) {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 7])->update(['operador_id' => $request->notario]);
+            } else {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 7])->delete();
+            }
+        } elseif (!$notario && $request->notario != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->notario,
+                'cargo' => 7
+            ]);
+        }
+
+        if($instructor) {
+            if($request->instructor != 0) {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 8])->update(['operador_id' => $request->instructor]);
+            } else {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 8])->delete();
+            }
+        } elseif (!$instructor && $request->instructor != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->instructor,
+                'cargo' => 8
+            ]);
+        }
+
+        if($asesor) {
+            if($request->asesor != 0) {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 8])->update(['operador_id' => $request->asesor]);
+            } else {
+                DB::table('causa_operador')->where(['causa_id' => $causa->id, 'cargo' => 8])->delete();
+            }
+        } elseif (!$asesor && $request->asesor != 0) {
+            $causa->operadores()->save($causa, [
+                'operador_id' => $request->asesor,
+                'cargo' => 8
+            ]);
+        }
+
+        return redirect()->action('CausaController@index')->with('message', '¡Causa actualizada con éxito!');
     }
 
     /**
@@ -485,6 +610,95 @@ class CausaController extends Controller
 
         $causa->delete();
 
-        return redirect()->action('CausaController@index')->with('message', 'Causa eliminada con exito!');
-	}
+        return redirect()->action('CausaController@index')->with('message', '¡Causa eliminada con éxito!');
+    }
+    
+    public function report()
+    {
+        return view('pdf/create');
+    }
+
+    public function statisticalPdf(Request $request)
+    {
+        $messages = [
+            'inicio.required' => 'Indique la fecha de inicio',
+            'fin.required' => 'Indique la fecha de fin'
+        ];
+        
+        $validator = Validator::make($request->all(), [
+            'inicio' => 'required',
+            'fin' => 'required'
+        ], $messages);
+
+        if($validator->fails()) {
+            return redirect()->action('CausalController@report')->withErrors($validator);
+        }
+
+        $r = Causa::whereBetween('fecha_sentencia', [$request->inicio, $request->fin])->get();
+
+        $c_fase_previa   = 0;
+        $c_proceso       = 0;
+        $c_fase_pruebas  = 0;
+        $c_finalizada    = 0;
+        $c_sentenciada   = 0;
+
+        $result = array();
+        $result['total'] = 0;
+        $result['c_fase_previa']   = 0;
+        $result['c_proceso']       = 0;
+        $result['c_fase_prueba']   = 0;
+        $result['c_finalizada']    = 0;
+        $result['c_sentenciada']   = 0;
+            
+        foreach($r as $rr) {
+            if($rr->etapa) {
+                switch($rr->etapa->fase_id) {
+                    case 1:
+                        $c_fase_previa++;
+                        break;
+                    case 2:
+                        $c_proceso++;
+                        break;
+                    case 3:
+                        $c_fase_pruebas++;
+                        break;
+                    case 4:
+                        $c_finalizada++;
+                        break; 
+                }
+            }
+            if(count($rr->causales) > 0) {
+                foreach ($rr->causales as $causal) {
+                    if($causal->pivot->sentencia) {
+                        $c_sentenciada++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $result['total'] = count($r);
+        $result['c_fase_previa']   = $c_fase_previa;
+        $result['c_proceso']       = $c_proceso;
+        $result['c_fase_prueba']   = $c_fase_pruebas;
+        $result['c_finalizada']    = $c_finalizada;
+        $result['c_sentenciada']   = $c_sentenciada;
+        
+        $pdf = PDF::loadView('pdf/estadistico', ['result' => $result, 'request' => $request]);
+
+        $hoy = getDate();
+
+        return $pdf->download('reporte_estadistico.pdf');
+    }
+
+    public function individualPdf($id)
+    {
+        $causa = Causa::find($id);
+
+        $pdf = PDF::loadView('pdf/individual', ['causa' => $causa]);
+
+        return $pdf->download($causa->nombre . '.pdf');
+    }
+
 }
+

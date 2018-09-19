@@ -24,6 +24,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -38,7 +44,7 @@
     <li class="active">
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -61,7 +67,7 @@
         @endif
         
         <form id="configuracion" action="{{ action('ConfiguracionController@update', ['id' => Auth::user()->id]) }}" method="POST">
-            <h3><strong>Configuracion</strong></h3>
+            <h3><strong>Configuración</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="_method" value="PUT">

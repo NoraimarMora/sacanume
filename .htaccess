@@ -1,0 +1,6 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^sacanume\.asovenca\.com\.ve$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.sacanume\.asovenca\.com\.ve$
+RewriteRule ^/?$ "http\:\/\/sacanume\.asovenca\.com\.ve\/public" [R=301,L]
+

@@ -44,7 +44,9 @@ form #descripcion {
 form .causales,
 form #tipo,
 form .operador,
-form #titulo {
+form #titulo,
+form #fase,
+form #fecha_sentencia {
 	padding: .45rem .6rem;
     font-size: 1rem;
 	line-height: 1.25;
@@ -53,6 +55,11 @@ form #titulo {
 	border-color: rgb(221, 219, 219);
 	color: #2A2A2A;
 	vertical-align: middle;
+}
+
+form #fase,
+form #fecha_sentencia {
+	width: 40%;
 }
 
 .operadores li {
@@ -124,4 +131,17 @@ form > div > a:hover {
 
 .sentencia input:checked + i {
 	color: #663300;
+}
+
+#inicio,
+#fin {
+	width: 85%;
+	display: inline-block;
+	border-radius: 25px;
+}
+
+#causa {
+	display: inline-block;
+    width: 75.5%;
+    border-radius: 25px;
 }

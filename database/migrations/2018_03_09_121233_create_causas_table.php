@@ -18,8 +18,10 @@ class CreateCausasTable extends Migration
             $table->string('nombre')->unique();
             $table->string('num_exp')->unique(); // Combinacion de un numero secuencial y el año de registro
             $table->integer('etapa_id')->unsigned()->nullable();
-            $table->foreign('etapa_id')->references('id')->on('etapas');
+            $table->foreign('etapa_id')->references('id')->on('etapas')->onDelete('SET NULL');
             $table->string('etapas_completadas')->nullable();
+            $table->enum('procedimiento', [1, 2]);
+            $table->date('fecha_sentencia');
             $table->timestamps();
         });
     }

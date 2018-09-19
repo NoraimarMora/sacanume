@@ -49,7 +49,7 @@ class OperadorController extends Controller
         ], $messages);
 
         if($validator->fails()) {
-            return redirect()->action('OperadorController@create')->withErrors($validator);
+            return redirect()->action('OperadorController@create')->withErrors($validator)->withInput();
         }
 
         $operador = new Operador();
@@ -59,7 +59,7 @@ class OperadorController extends Controller
         $operador->apellido = $request->apellido;
         $operador->save();
 
-        return redirect()->action('OperadorController@index')->with('message', 'Operador credo con exito!');
+        return redirect()->action('OperadorController@index')->with('message', '¡Operador credo con éxito!');
     }
 
     /**
@@ -115,7 +115,7 @@ class OperadorController extends Controller
         $operador->apellido = $request->apellido;
         $operador->save();
 
-        return redirect()->action('OperadorController@index')->with('message', 'Operador actualizado con exito!');
+        return redirect()->action('OperadorController@index')->with('message', '¡Operador actualizado con éxito!');
     }
 
     /**
@@ -134,6 +134,6 @@ class OperadorController extends Controller
 
         $operador->delete();
 
-        return redirect()->action('OperadorController@index')->with('message', 'Operador eliminado con exito!');
+        return redirect()->action('OperadorController@index')->with('message', '¡Operador eliminado con éxito!');
 	}
 }

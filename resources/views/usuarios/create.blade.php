@@ -24,6 +24,12 @@
         </a>
     </li>
     <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
+    <li>
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -38,7 +44,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -71,11 +77,11 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="nombre">* <strong>Nombre:</strong></label>
-                    <input type="text" class="form-control" name="nombre" id="nombre">
+                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre') }}">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="apellido">* <strong>Apellido:</strong></label>
-                    <input type="text" class="form-control" name="apellido" id="apellido">
+                    <input type="text" class="form-control" name="apellido" id="apellido" value="{{ old('apellido') }}">
                 </div>
             </div>
             <div class="form-group col-md-12" id="select">

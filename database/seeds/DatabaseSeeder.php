@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Usuario;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $usuario = new Usuario();
+/*
+        $usuario->nombre = $request->nombre;
+        $usuario->apellido = $request->apellido;
+        $usuario->tipo = $request->tipo;
+        $usuario->username = strtolower($usuario->nombre)[0] . strtolower($usuario->apellido) . '.';
+        $usuario->password = bcrypt('temp123');
+        $usuario->save();
+        $usuario->username .= $usuario->id;
+        $usuario->save();*/
     }
 }

@@ -19,7 +19,7 @@ class CreateCausaOperadorTable extends Migration
             $table->foreign('causa_id')->references('id')->on('causas');
             $table->integer('operador_id')->unsigned();
             $table->foreign('operador_id')->references('id')->on('operadores');
-            $table->enum('cargo', [1, 2, 3, 4, 5]);
+            $table->enum('cargo', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
             $table->timestamps();
         });
     }

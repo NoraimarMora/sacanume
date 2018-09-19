@@ -25,4 +25,12 @@ Route::resource('/usuarios', 'UsuarioController')->middleware('auth');
 
 Route::resource('/configuracion', 'ConfiguracionController')->middleware('auth');
 
+Route::resource('/etapas', 'EtapaController')->middleware('auth');
+
+Route::get('/causas/pdf/reportes', 'CausaController@report')->name('causas.report');
+
+Route::post('/causas/pdf/reportes/descarga1', 'CausaController@statisticalPdf')->name('causas.statisticalPdf');
+
+Route::get('/causas/pdf/reportes/descarga2/{causa}', 'CausaController@individualPdf')->name('causas.individualPdf');
+
 Auth::routes();

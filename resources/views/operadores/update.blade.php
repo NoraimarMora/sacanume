@@ -23,6 +23,12 @@
             <p>Causales</p>
         </a>
     </li>
+    <li>
+        <a href="{{ action('EtapaController@index') }}">
+            <i class="fa fa-list"></i>
+            <p>Etapas</p>
+        </a>
+    </li>
     <li class="active">
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
@@ -38,7 +44,7 @@
     <li>
         <a href="{{ action('ConfiguracionController@edit', ['id' => Auth::user()->id]) }}">
             <i class="fa fa-cogs"></i>
-            <p>Configuracion</p>
+            <p>Configuración</p>
         </a>
     </li>
     <li>
@@ -80,15 +86,9 @@
                 </div>
             </div>
             <div class="form-group col-md-12">
-                <label for="titulo">* <strong>Titulo:</strong></label>
+                <label for="titulo">* <strong>Título:</strong></label>
                 <br>
                 <select id="titulo" name="titulo">
-                    @if($operador->titulo == 'Obispo')
-                        <option value="Obispo" selected>Obispo</option>
-                    @else
-                        <option value="Obispo">Obispo</option>
-                    @endif
-                    
                     @if($operador->titulo == 'Monseñor')
                         <option value="Monseñor" selected>Monseñor</option>
                     @else

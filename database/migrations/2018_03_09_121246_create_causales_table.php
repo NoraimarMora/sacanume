@@ -15,7 +15,7 @@ class CreateCausalesTable extends Migration
     {
         Schema::create('causales', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cannon');
+            $table->integer('cannon');
             $table->integer('numero')->nullable();
             $table->string('descripcion');
             $table->timestamps();

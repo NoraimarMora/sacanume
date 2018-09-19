@@ -11,7 +11,7 @@
 body {
 	background-image: url('../img/login.jpg');
 	background-repeat: no-repeat;
-	background-size: auto;
+	background-size: 100%;
 	background-color: #F0F0F1;
 }
 

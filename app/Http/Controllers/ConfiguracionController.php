@@ -80,7 +80,7 @@ class ConfiguracionController extends Controller
 
         $usuario->save();
 
-        return redirect()->action('ConfiguracionController@edit', ['id' => $id])->with('message', 'Informacion actualizada con exito!');
+        return redirect()->action('ConfiguracionController@edit', ['id' => $id])->with('message', '¡Información actualizada con éxito!');
     }
 
     /**

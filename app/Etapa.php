@@ -19,4 +19,11 @@ class Etapa extends Model
     {
         return $this->hasMany('App\Causa');
     }
+
+    public function scopeSearch($query, $busqueda) 
+    {
+        return $query->where(function ($q) use ($busqueda) {
+            $q->where('descripcion', 'LIKE', "%$busqueda%");
+        });
+    }
 }

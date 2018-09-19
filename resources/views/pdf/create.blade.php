@@ -11,7 +11,7 @@
             <p>Inicio</p>
         </a>
     </li>
-    <li>
+    <li class="active">
         <a href="{{ action('CausaController@index') }}">
             <i class="fa fa-balance-scale"></i>
             <p>Causas</p>
@@ -24,12 +24,6 @@
         </a>
     </li>
     <li>
-        <a href="{{ action('EtapaController@index') }}">
-            <i class="fa fa-list"></i>
-            <p>Etapas</p>
-        </a>
-    </li>
-    <li class="active">
         <a href="{{ action('OperadorController@index') }}">
             <i class="fa fa-users"></i>
             <p>Operadores</p>
@@ -69,34 +63,29 @@
                 </ul>
             </div>
         @endif
-        
-        <form id="nuevo_operador" action="{{ action('OperadorController@store') }}" method="POST">
-            <h3><strong>Nuevo Operador</strong></h3>
+
+        <form id="nuevo_reporte" action="{{ action('CausaController@statisticalPdf') }}" method="POST">
+            <h3><strong>Generar reporte</strong></h3>
             <br>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="nombre">* <strong>Nombre:</strong></label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre') }}">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="apellido">* <strong>Apellido:</strong></label>
-                    <input type="text" class="form-control" name="apellido" id="apellido" value="{{ old('apellido') }}">
-                </div>
-            </div>
             <div class="form-group col-md-12">
-                <label for="titulo">* <strong>Título:</strong></label>
+                <label><strong>Rango de fechas:</strong></label>
                 <br>
-                <select id="titulo" name="titulo">
-                    <option value="Monseñor" selected>Monseñor</option>
-                    <option value="Licenciado/a">Licenciado/a</option>
-                    <option value="Otro">Otro</option>
-                </select>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inicio">Inicio: </label>
+                        <input type="date" name="inicio" id="inicio" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fin">Fin: </label>
+                        <input type="date" name="fin" id="fin" class="form-control">
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-icon btn-sm pull-right">
-                    <i class="fa fa-save"></i> Guardar</button>
+                    <i class="fa fa-file"></i> Generar pdf</button>
                 </div>
             </div>
         </form>
